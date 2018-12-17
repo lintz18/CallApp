@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (getApplicationContext().checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Permission has not been granted, therefore prompt the user to grant permission
+            // Permiso no garantizado, aún así miramos los permisos del usuario
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.READ_PHONE_STATE)){
                 ActivityCompat.requestPermissions(this,
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,  String[] permissions,  int[] grantResults) {
         switch(requestCode){
+            //Habilitamos permisos
             case 1:{
                 if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){

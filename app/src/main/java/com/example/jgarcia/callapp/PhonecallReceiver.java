@@ -9,7 +9,7 @@ import android.telephony.TelephonyManager;
 
 public abstract class PhonecallReceiver extends BroadcastReceiver {
 
-    //The receiver will be recreated whenever android feels like it.  We need a static variable to remember data between instantiations
+    //Se ejecutará cuando sea necesario
 
     private static int lastState = TelephonyManager.CALL_STATE_IDLE;
     private static Date callStartTime;
@@ -21,7 +21,7 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         try{
-            //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
+            //Recogemos el numero de telf de dos intents
             if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
                 savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
             }
@@ -48,20 +48,20 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
 
     }
 
-    //Derived classes should override these to respond to specific events of interest
+    //Metodos de respuesta a la llamada
     protected void onIncomingCallStarted(Context ctx, String number, Date start){}
     protected void onOutgoingCallStarted(Context ctx, String number, Date start){}
     protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end){}
     protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end){}
     protected void onMissedCall(Context ctx, String number, Date start){}
 
-    //Deals with actual events
 
     //Incoming call-  goes from IDLE to RINGING when it rings, to OFFHOOK when it's answered, to IDLE when its hung up
     //Outgoing call-  goes from IDLE to OFFHOOK when it dials out, to IDLE when hung up
+
     public void onCallStateChanged(Context context, int state, String number) {
         if(lastState == state){
-            //No change, debounce extras
+            //Si no hay cambios vuelve
             return;
         }
         switch (state) {
@@ -72,7 +72,7 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
                 onIncomingCallStarted(context, number, callStartTime);
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
-                //Transition of ringing->offhook are pickups of incoming calls.  Nothing done on them
+                //Transición desde la llamada hasta que se descuelga el telf
                 if(lastState != TelephonyManager.CALL_STATE_RINGING){
                     isIncoming = false;
                     callStartTime = new Date();
@@ -80,9 +80,9 @@ public abstract class PhonecallReceiver extends BroadcastReceiver {
                 }
                 break;
             case TelephonyManager.CALL_STATE_IDLE:
-                //Went to idle-  this is the end of a call.  What type depends on previous state(s)
+                //Cuando el estado de la llamada es inactiva
                 if(lastState == TelephonyManager.CALL_STATE_RINGING){
-                    //Ring but no pickup-  a miss
+                    //Suena pero no se coge la llamada
                     onMissedCall(context, savedNumber, callStartTime);
                 }
                 else if(isIncoming){
