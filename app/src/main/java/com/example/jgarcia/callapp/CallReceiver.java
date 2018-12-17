@@ -31,7 +31,7 @@ public class CallReceiver extends PhonecallReceiver {
         Toast.makeText(ctx,"Outgoing", Toast.LENGTH_LONG).show();
     }
 
-    //Llamada perdida
+    //Llamada perdida*
     @Override
     protected void onMissedCall(Context ctx, String number, Date start) {
         //ADD TO GUIDE, MISSED CALL
