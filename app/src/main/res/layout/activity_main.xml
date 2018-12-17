@@ -5,7 +5,52 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="100">
+
+    <ImageView
+        android:id="@+id/imgPersona"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50"
+        android:src="@mipmap/ic_launcher_call"
+        android:scaleType="centerCrop"/>
+
+    <ListView
+        android:id="@+id/lstRegistro"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:divider="#000000"
+        android:dividerHeight="2px" />
+
+    <EditText
+        android:id="@+id/edtNumero"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:textColorHint="@color/colorFabBackground"
+        android:inputType="number"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id = "@+id/fabLlamada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:src="@drawable/ic_local_phone_black_24dp" />
+
+    </LinearLayout>
+
+
+
+
 
 <!--
 

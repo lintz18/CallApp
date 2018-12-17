@@ -13,7 +13,7 @@ public class CallReceiver extends PhonecallReceiver {
         Toast.makeText(ctx,"Phone Is Ringing" + ":  " + number, Toast.LENGTH_LONG).show();
     }
 
-    //Llamada cogida
+    //Llamada saliente
     @Override
     protected void onOutgoingCallStarted(Context ctx, String number, Date start) {
         Toast.makeText(ctx,"Started", Toast.LENGTH_LONG).show();
@@ -25,7 +25,7 @@ public class CallReceiver extends PhonecallReceiver {
         Toast.makeText(ctx,"Call is finished", Toast.LENGTH_LONG).show();
     }
 
-    //Llamada colgada
+    //Llamada saliente colgada
     @Override
     protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end) {
         Toast.makeText(ctx,"Outgoing", Toast.LENGTH_LONG).show();
