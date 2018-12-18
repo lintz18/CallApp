@@ -1,6 +1,8 @@
 package com.example.jgarcia.callapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -11,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,12 +21,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.jgarcia.callapp.interfaces.callMethods;
+import com.example.jgarcia.callapp.adapters.LogAdapter;
+import com.example.jgarcia.callapp.model.CallObject;
+import java.util.ArrayList;
 
-import java.time.Instant;
-import java.util.Date;
 
-public abstract class MainActivity extends AppCompatActivity implements callMethods {
+public class MainActivity extends AppCompatActivity{
 
     private ImageView imgPersona;
     private ListView lstRegistro;
@@ -33,6 +34,11 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
     private EditText edtNumero;
     private CallReceiver call = new CallReceiver();
     private int number;
+    private ArrayList<CallObject> logObjects = new ArrayList<>();
+
+    private LogAdapter mLogAdapter;
+
+    public static Intent callIntent;
 
     public static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
     public static final int MY_PERMISSIONS_REQUEST_PROCESS_OUTGOING_CALLS = 2;
@@ -62,6 +68,17 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
             //No hacer nada
         }
 
+        //recibirDatos(getBaseContext(),null, null);
+
+        ArrayList<CallObject> logObjects = new ArrayList<>();
+
+        logObjects.add(new CallObject(null, "650649878", "Jose"));
+        logObjects.add(new CallObject(null, "635678878", "Anto"));
+
+
+        mLogAdapter = new LogAdapter(getBaseContext(), logObjects);
+        lstRegistro.setAdapter(mLogAdapter);
+
 
         //Listener del fab que nos lleva a la otra activity donde ya estamos realizando la llamada
         fabLlamada.setOnClickListener(new View.OnClickListener() {
@@ -74,18 +91,9 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
             }
         });
 
-
-/*
-        if (getApplicationContext().checkSelfPermission(Manifest.permission.PROCESS_OUTGOING_CALLS)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission has not been granted, therefore prompt the user to grant permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
-                    MY_PERMISSIONS_REQUEST_PROCESS_OUTGOING_CALLS);
-        }*/
     }
 
-    public void bindUI(){
+    public void bindUI() {
         fabLlamada = findViewById(R.id.fabLlamada);
         imgPersona = findViewById(R.id.imgPersona);
         edtNumero = findViewById(R.id.edtNumero);
@@ -95,7 +103,7 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
         edtNumero.setHintTextColor(getResources().getColor(R.color.colorFabBackground));
     }
 
-    @Override
+
     public void initiateCall() {
         if(checkIfAlreadyHaveCallPermission()){
             makeTheCall(edtNumero.getText().toString());
@@ -105,7 +113,6 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
         }
     }
 
-    @Override
     public boolean checkIfAlreadyHaveCallPermission() {
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
         if (result == PackageManager.PERMISSION_GRANTED){
@@ -116,7 +123,6 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
         }
     }
 
-    @Override
     public void requestCallPermission() {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE},MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
     }
@@ -130,7 +136,8 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "Permission garanted!", Toast.LENGTH_LONG).show();
                     }
-                    makeTheCall(edtNumero.getText().toString());
+                    initiateCall();
+                    //makeTheCall(edtNumero.getText().toString());
                 } else {
                     Toast.makeText(this, "No permission garanted!", Toast.LENGTH_LONG).show();
                 }
@@ -140,35 +147,44 @@ public abstract class MainActivity extends AppCompatActivity implements callMeth
     }
 
 
-
-    @Override
     public void makeTheCall(String numberString) {
         if (!numberString.equals("")) {
-            Uri number = Uri.parse("tel:" + numberString);
-            Intent callIntent = new Intent(Intent.ACTION_CALL, number);
-            //callIntent.setData(Uri.parse("tel:" + numberString));
+            callIntent = new Intent(this, CallActivity.class);
+            callIntent.setData(Uri.parse("tel:" + numberString));
+            /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            }
+            else{
+                startActivity(callIntent);
+            }*/
+
             try{
-                //AlertDialog
+                AlertDialog.Builder builderCall = new AlertDialog.Builder(this);
+                builderCall.setMessage("Quieres realizar la llamada?");
+                builderCall.setCancelable(true);
+
+                builderCall.setPositiveButton("No", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+
+                builderCall.setNegativeButton("Si", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        startActivity(callIntent);
+                    }
+                });
+
+                AlertDialog alertCall = builderCall.create();
+                alertCall.show();
+
 
             }catch(android.content.ActivityNotFoundException ex){
                 Toast.makeText(getBaseContext(),"Your activity not found", Toast.LENGTH_SHORT).show();
 
             }
-            /*
-            Uri number = Uri.parse("tel:" + numberString);
-            Intent dial = new Intent(Intent.ACTION_CALL, number);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            startActivity(dial);
-        */
         }
     }
+
 }

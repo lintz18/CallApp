@@ -1,15 +1,15 @@
 package com.example.jgarcia.callapp.interfaces;
 
+import android.content.Context;
+
+import java.util.Date;
+
 public interface callMethods {
 
-    public void initiateCall();
-
-    public boolean checkIfAlreadyHaveCallPermission();
-
-    public void requestCallPermission();
-
-    public void onRequestPermissionResult(int requestCode, String permissions[], int[] grantResults);
-
-    public void makeTheCall(String numberString);
+    void onIncomingCallStarted(Context ctx, String number, Date start);
+    void onOutgoingCallStarted(Context ctx, String number, Date start);
+    void onIncomingCallEnded(Context ctx, String number, Date start, Date end);
+    void onOutgoingCallEnded(Context ctx, String number, Date start, Date end);
+    void onMissedCall(Context ctx, String number, Date start);
 
 }

@@ -59,6 +59,8 @@
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
+        <activity android:name=".CallActivity">
+        </activity>
 
     </application>
 
