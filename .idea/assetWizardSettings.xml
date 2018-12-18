@@ -90,9 +90,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="01a800" />
-                            <entry key="outputName" value="ic_local_phone" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="height" value="32" />
+                            <entry key="outputName" value="ic_local_phone_black_32dp" />
+                            <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\jgarcia" />
+                            <entry key="width" value="32" />
                           </map>
                         </option>
                       </PersistentState>

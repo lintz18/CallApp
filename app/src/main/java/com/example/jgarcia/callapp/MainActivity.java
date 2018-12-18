@@ -15,7 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity{
 
         fabLlamada.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFabBackground)));
         edtNumero.setHintTextColor(getResources().getColor(R.color.colorFabBackground));
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
 
@@ -150,6 +154,8 @@ public class MainActivity extends AppCompatActivity{
     public void makeTheCall(String numberString) {
         if (!numberString.equals("")) {
             callIntent = new Intent(this, CallActivity.class);
+            callIntent.putExtra("Telf", edtNumero.getText().toString());
+            Log.i("NUMERO: ", edtNumero.getText().toString());
             callIntent.setData(Uri.parse("tel:" + numberString));
             /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 

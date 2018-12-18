@@ -97,6 +97,8 @@ public abstract class PhonecallReceiver extends BroadcastReceiver implements cal
                 onIncomingCallStarted(context, number, callStartTime);
                 Intent i = new Intent(context, CallActivity.class);
                 i.putExtras(intent);
+                i.putExtra("Estado", "1");
+                i.putExtra("Num", number);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(i);

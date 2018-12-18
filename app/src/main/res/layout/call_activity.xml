@@ -2,13 +2,29 @@
 <LinearLayout
     android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
 
     <TextView
         android:id="@+id/txtNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="NUM: "/>
+        android:text="NUM: default"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="NONE"/>
+
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/btnEnd"/>
 
 </LinearLayout>
